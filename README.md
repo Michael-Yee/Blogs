@@ -1,1 +1,1 @@
-# scala
+# My journey with Scala
