@@ -20,6 +20,7 @@ Think "mini Flask application" when you think of a blueprint.  While not having 
 Sample blueprint folder structure for the Flask application
 
 .
+
 ├── app.py # file to start the server
 
 ├── app_utils.py # helper functions for app
