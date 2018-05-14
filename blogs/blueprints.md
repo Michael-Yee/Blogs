@@ -21,33 +21,61 @@ Sample blueprint folder structure for the Flask application
 
 .
 ├── app.py # file to start the server
+
 ├── app_utils.py # helper functions for app
+
 │
+
 ├── instance # configuration files
-│ 
+
+│
+
 ├── project # the root folder for all of our resources
+
 │   │ 
+
 │   ├── __init__.py # where we define the app's variables and registering blueprints  
+
 │   │ 
+
 │   ├── templates # templates for ALL other templates to inherit from
+
 │   │   └── base.html
+
 │   │ 
+
 │   ├── retrieval # a folder for the retrieval resource
+
 │   │   ├── __init__.py
+
 │   │   ├── retrieval_utils.py # helper functions for retrieval
+
 │   │   ├── routes.py
+
 │   │   ├── static # storage location for CSS, JS, images, etc...
+
 │   │   └── templates # templates specific to the retrieval resource
+
 │   │       └── retrieval
+
 │   │           └── display.html
+
 │   │ 
+
 │   ├── scrape # a folder for the scrape resource
+
 │   │   ├── __init__.py
+
 │   │   ├── scrape_utils.py
+
 │   │   └── routes.py
+
 │   │
+
 │   └── ...
+
 │   
+
 └── ...
 
 Let us take a look at a single blueprint (retrieval folder), it encapsulates all the components to handle the retrieval functionally of the application (defining routes, generating templates, etc...)
