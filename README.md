@@ -1,1 +1,1 @@
-# My journey with Scala
+# Random thoughts
