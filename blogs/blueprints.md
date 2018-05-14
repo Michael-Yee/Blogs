@@ -82,12 +82,19 @@ Sample blueprint folder structure for the Flask application
 Let us take a look at a single blueprint (retrieval folder), it encapsulates all the components to handle the retrieval functionally of the application (defining routes, generating templates, etc...)
 
 retrieval 
+
 ├── __init__.py
+
 ├── retrieval_utils.py
+
 ├── routes.py
+
 ├── static
+
 └── templates 
+
     └── retrieval
+    
         └── display.html
 
 The recommended naming structure for storing templates is ".../blueprint_name/templates/blueprint_name/". The template directory for each blueprint is added to the search path within your Flask application. With this structure, you can define the templates for each blueprint within the blueprint and still import a base template ".../project/templates/ that is shared by all the blueprints.
