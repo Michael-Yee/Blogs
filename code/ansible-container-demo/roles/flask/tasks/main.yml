@@ -1,0 +1,32 @@
+---
+- name: Update APT Repositories
+  apt:
+    update_cache: yes
+    cache_valid_time: 600
+
+- name: Install APT Requirements
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "python-pip"
+
+- name: Install Pip Requirements
+  pip:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "flask"
+    - "gunicorn"
+    - "redis"
+
+- name: Create App Folder
+  file: 
+   path: "/app"
+   state: directory
+
+- name: Copy Flask App
+  copy:
+    src: app.py
+    dest: /app/app.py
+    

@@ -1,0 +1,44 @@
+# container.yml Syntax Version (don't change this)
+version: "2"
+settings:
+  # Settings for the "conductor" container.
+  # The Conductor container is a container used to
+  # orchestrate the build of other containers in the project
+  conductor:
+    # Base image for the conductor container
+    base: "alpine:3.5"
+  # Title of the Project
+  project_name: "ansible-container-demo"
+
+services:
+  
+  # DB Backend
+  redis:
+    from: "redis"
+    ports:
+      - "6379"
+
+  # Application
+  flask:
+    from: "ubuntu:xenial"
+    roles:
+      # Applying a role to a container
+      - role: flask
+    ports:
+      - "5000"
+    command: ["gunicorn", "--bind", "0.0.0.0:5000", "app:app", "--chdir", "/app"]
+  
+  # Proxy Frontend
+  nginx:
+    from: "ubuntu:xenial"
+    roles:
+      # Syntax for expressing extra role variables
+      - role: "nginx"
+        # These varibles are passed to the nginx config template
+        nginx_proxy_host: "flask"
+        nginx_proxy_port: 5000
+        nginx_listen_port: 8080
+    ports:
+      - "8080:8080"
+    command: ["nginx", "-c", "/etc/nginx/nginx_ansible-container.conf", "-g", "daemon off;"]
+    
