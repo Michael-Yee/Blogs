@@ -6,7 +6,7 @@ settings:
   # orchestrate the build of other containers in the project
   conductor:
     # Base image for the conductor container
-    base: "alpine:3.5"
+    base: "ubuntu:xenial"
   # Title of the Project
   project_name: "ansible-container-demo"
 
