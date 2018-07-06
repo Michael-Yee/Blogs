@@ -37,7 +37,7 @@ workflows:
   version: 2
   master:
     jobs:
-      - circleci_demo_build:
+      - master_build:
           filters:
             branches:
               only: master
