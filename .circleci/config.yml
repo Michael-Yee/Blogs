@@ -1,10 +1,15 @@
 version: 2
 jobs:
   master_build:
+    machine: true
+
     steps:
       - run: echo "Master branch..."
 
   circleci_demo_build:
+    docker:
+      - image: circleci/python:latest-node-browsers
+
     steps:
       - checkout
       - run: echo "CircleCI demo branch..."
@@ -24,4 +29,4 @@ workflows:
           filters:
             branches:
               only: circleci_demo
-              
+
