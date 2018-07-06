@@ -39,7 +39,7 @@ jobs:
 
   docker_build:
     docker:
-      - image: docker:18.03.01-git
+      - image: docker:18.03.1-ce
 
     working_directory: /app
 
