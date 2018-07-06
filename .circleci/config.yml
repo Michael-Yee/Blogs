@@ -8,7 +8,7 @@ jobs:
 
   circleci_demo_build:
     docker:
-      - image: circleci/python:latest
+      - image: circleci/python:3.6.5
 
     steps:
       - checkout
