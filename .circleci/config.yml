@@ -39,18 +39,19 @@ jobs:
 
   docker_build:
     docker:
-      - image: docker:18.03.01-ce-git
+      - image: docker:18.03.01-git
 
     working_directory: /app
 
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
+        docker_layer_caching: true
       - run:
-          name: Install dependencies
+          name: Build image
           command: |
-            apk add --no-cache \
-              py-pip=9.0.0-r1
+            cd code/circleci-demo/app
+            docker build -t docker:latest .
 
 
 workflows:
