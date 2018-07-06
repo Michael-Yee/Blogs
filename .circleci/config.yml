@@ -12,18 +12,19 @@ jobs:
 
     steps:
       - checkout
-      
+
       - run:
           name: install dependencies
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install -r requirements.txt
-            
+            pip install -r code/circleci-demo/app/requirements.txt
+        
       - run:
           name: run tests
           command: |
             . venv/bin/activate
+            cd code/circleci-demo
             python -m unittest discover -v -s ./tests -p "test*.py"
 
       - store_artifacts:
@@ -36,7 +37,7 @@ workflows:
   version: 2
   master:
     jobs:
-      - master_build:
+      - circleci_demo_build:
           filters:
             branches:
               only: master
