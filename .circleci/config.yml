@@ -8,10 +8,44 @@ jobs:
 
   circleci_demo_build:
     docker:
-      - image: circleci/python:latest-node-browsers
+      - image: circleci/python:latest
 
     steps:
       - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "requirements.txt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          name: install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+            - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "requirements.txt" }}
+        
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "requirements.txt" }}
+        
+      - run:
+          name: run tests
+          command: |
+            . venv/bin/activate
+            python -m unittest discover -v -s ./tests -p "test*.py"
+
+      - store_artifacts:
+          path: test-reports
+          destination: test-reports
+
       - run: echo "CircleCI demo branch..."
 
 workflows:
@@ -28,5 +62,4 @@ workflows:
       - circleci_demo_build:
           filters:
             branches:
-              only: circleci-demo
-
+              only: circleci_demo
