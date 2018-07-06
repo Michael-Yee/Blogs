@@ -55,7 +55,7 @@ jobs:
             apk update && apk add curl curl-dev bash
             docker ps
             sleep 10
-            curl http://localhost:5000/V1/ping
+            curl http://$(docker-machine ip default):5000/V1/ping
 
 
 workflows:
