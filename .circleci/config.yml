@@ -62,4 +62,4 @@ workflows:
       - circleci_demo_build:
           filters:
             branches:
-              only: circleci_demo
+              only: circleci-demo
