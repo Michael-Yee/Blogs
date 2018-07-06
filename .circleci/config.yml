@@ -37,6 +37,22 @@ jobs:
 
       - run: echo "CircleCI demo branch..."
 
+  docker_build:
+    docker:
+      - image: docker:18.03.01-ce-git
+
+    working_directory: /app
+
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --no-cache \
+              py-pip=9.0.0-r1
+
+
 workflows:
   version: 2
   master:
@@ -52,3 +68,10 @@ workflows:
           filters:
             branches:
               only: circleci-demo
+
+  docker:
+    jobs:
+      - docker_build:
+          filters:
+            branches:
+              only: docker
