@@ -38,7 +38,7 @@ jobs:
       - run: echo "CircleCI demo branch..."
 
   docker_build:
-    docker_demo:
+    docker:
       - image: docker:18.03.1-ce
 
     working_directory: /app
