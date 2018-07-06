@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from flask import Flask, request
+from flask import Flask
 from flask_restful import Resource, Api
 
 
