@@ -18,5 +18,5 @@ RUN apt-get update \
 COPY . /app
 WORKDIR /app
 RUN pip install -r requirements.txt
-ENTRYPOINT ["python"]
+ENTRYPOINT ["python3.6"]
 CMD ["app.py"]

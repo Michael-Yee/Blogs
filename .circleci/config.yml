@@ -38,7 +38,7 @@ jobs:
       - run: echo "CircleCI demo branch..."
 
   docker_build:
-    docker:
+    docker_demo:
       - image: docker:18.03.1-ce
 
     working_directory: /app
@@ -50,7 +50,9 @@ jobs:
           name: Build image
           command: |
             cd code/circleci-demo/app
-            docker build -t docker:latest .
+            docker build -t docker_demo:latest .
+            docker run -d -p 5000:5000 docker_demo
+            curl http://localhost:5000/V1/ping
 
 
 workflows:
@@ -69,7 +71,7 @@ workflows:
             branches:
               only: circleci-demo
 
-  docker:
+  docker_demo:
     jobs:
       - docker_build:
           filters:
