@@ -1,4 +1,3 @@
 # CircleCI workflow demo 
 
-Workflow example - triggering jobs based on branch
-
+Workflow example: triggering a job based on branch
