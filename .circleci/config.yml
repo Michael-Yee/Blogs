@@ -18,13 +18,13 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            ls
-            pip install -r requirements.txt
+            pip install -r code/circleci-demo/app/requirements.txt
         
       - run:
           name: run tests
           command: |
             . venv/bin/activate
+            cd code/circleci-demo
             python -m unittest discover -v -s ./tests -p "test*.py"
 
       - store_artifacts:
