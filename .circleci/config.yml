@@ -56,7 +56,7 @@ jobs:
             docker ps
             base=https://github.com/docker/machine/releases/download/v0.14.0 &&
             curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/tmp/docker-machine &&
-            sudo install /tmp/docker-machine /usr/local/bin/docker-machine
+            install /tmp/docker-machine /usr/local/bin/docker-machine
             curl http://$(docker-machine ip default):5000/V1/ping
 
 
