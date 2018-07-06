@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM alpine:latest
 
 MAINTAINER Michael Uee "michael.yee.ottawa@gmail.com"
 
