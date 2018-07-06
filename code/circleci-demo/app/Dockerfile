@@ -1,6 +1,6 @@
-MAINTAINER Michael Uee "michael.yee.ottawa@gmail.com"
-
 FROM ubuntu:16.04
+
+MAINTAINER Michael Uee "michael.yee.ottawa@gmail.com"
 
 RUN apt-get update \
     && apt-get install -y software-properties-common curl \
