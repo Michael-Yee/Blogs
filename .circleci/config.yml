@@ -50,6 +50,13 @@ jobs:
 
 workflows:
   version: 2
+  master:
+    jobs:
+      - circleci_demo_build:
+          filters:
+            branches:
+              only: master
+              
   circleci_demo:
     jobs:
       - circleci_demo_build:
