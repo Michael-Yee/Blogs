@@ -52,6 +52,8 @@ jobs:
             cd code/circleci-demo/app
             docker build -t docker_demo:latest .
             docker run -d -p 5000:5000 docker_demo
+            #apt-get install curl
+            apk update && apk add curl curl-dev bash
             curl http://localhost:5000/V1/ping
 
 
