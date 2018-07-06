@@ -1,3 +1,4 @@
 Flask==1.0.2
 Flask_RESTful==0.3.6
+pylint==1.9.2
 pytest==3.6.3
