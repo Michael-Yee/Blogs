@@ -8,7 +8,7 @@ jobs:
 
   circleci_demo_build:
     docker:
-      - image: circleci/python:latest
+      - image: circleci/python:3.6-node
 
     steps:
       - checkout
@@ -25,11 +25,15 @@ jobs:
           command: |
             . venv/bin/activate
             cd code/circleci-demo
-            python -m unittest discover -v -s ./tests -p "test*.py"
+            mkdir test-reports
+            python -m pytest --junitxml="test-reports/pytest.junit.xml"
+            python -m pylint --rcfile=.pylintrc --output-format=parseable app >> test-reports/pylint.out
+
+      - store_test_results:
+          path: code/circleci-demo/test-reports
 
       - store_artifacts:
-          path: test-reports
-          destination: test-reports
+          path: code/circleci-demo/test-reports
 
       - run: echo "CircleCI demo branch..."
 
@@ -37,7 +41,7 @@ workflows:
   version: 2
   master:
     jobs:
-      - master_build:
+      - circleci_demo_build:
           filters:
             branches:
               only: master
