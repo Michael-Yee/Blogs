@@ -36,6 +36,8 @@ jobs:
           path: code/circleci-demo/test-reports
 
       - run: echo "CircleCI demo branch..."
+      
+      - run: echo "CircleCI demo 2..."
 
 workflows:
   version: 2
