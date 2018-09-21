@@ -71,13 +71,13 @@ The Consumer is the one or multiple Celery workers executing the tasks. You coul
 
 ## Structure
 
-+--parent
-|  +--proj
-|  |  +--__init__.py
-|  |  +--celery.py
-|  |  +--celeryconfig.py
-|  |  +--tasks.py
-|  |  +--run_tasks.py
+    +--parent
+    |  +--proj
+    |  |  +--__init__.py
+    |  |  +--celery.py
+    |  |  +--celeryconfig.py
+    |  |  +--tasks.py
+    |  |  +--run_tasks.py
 
 ## celery.py
 
