@@ -1,0 +1,12 @@
+version: '2'
+services:
+  Chrome:
+    scale: 1
+    start_on_create: true
+  firefox:
+    scale: 1
+    start_on_create: true
+  SeleniumHub:
+    scale: 1
+    start_on_create: true
+    

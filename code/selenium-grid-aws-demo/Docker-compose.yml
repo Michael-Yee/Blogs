@@ -1,0 +1,27 @@
+version: '2'
+services:
+  Chrome:
+    image: selenium/node-chrome
+    stdin_open: true
+    tty: true
+    links:
+    - SeleniumHub:Hub
+    labels:
+      io.rancher.container.pull_image: always
+  firefox:
+    image: selenium/node-firefox
+    stdin_open: true
+    tty: true
+    links:
+    - SeleniumHub:Hub
+    labels:
+      io.rancher.container.pull_image: always
+  SeleniumHub:
+    image: selenium/hub
+    stdin_open: true
+    tty: true
+    ports:
+    - 4444:4444/tcp
+    labels:
+      io.rancher.container.pull_image: always
+      
