@@ -7,7 +7,7 @@ published: True
 
 # Overview
 
-In this blog, I will describe how I spin up a Selenium grid on AWS.
+In this blog, I will describe how I would spin up a Selenium grid on AWS.
 
 ## What Is Selenium & Selenium Grid?
 
@@ -32,12 +32,7 @@ Selenium Grid has a Hub and Node Architecture.
 - Nodes can be launched on multiple machines with different platforms and browsers.
 - The machines running the nodes need not be the same platform as that of the hub.
 
-## Objectives
-- Create AWS EC2 instance running Ubuntu 16.04.
-- Ensure EC2 security group has port 8080, 22(in case if you need ssh), 2376, 450, 4500 open.
-- Install Docker.
-- Add Ubuntu user to docker group sudo usermod –append –groups docker ubuntu.
-- Pull Rancher Server container image from Docker Store and run at startup.
+Let's start!
 
 ---
 
@@ -103,7 +98,7 @@ The configuration file used to define what image we want built and how is called
 
 We will start by creating the template which has the following sections variables, builders and provisioners.
 
-Variables contains all the varibles.
+Variables contains all the variables.
 
 Builders are responsible for creating machines and generating images from them for various platforms. In our case, we are configuring a single builder of type amazon-ebs. This is the Amazon EC2 AMI builder that ships with Packer. This builder builds an EBS-backed AMI by launching a source AMI, provisioning on top of that and re-packaging it into a new AMI. The additional keys within the object are configuration for this builder, specifying things such as access keys, the source AMI to build from and more. 
 
@@ -880,13 +875,13 @@ us-east-1: ami-09c624b6cc0ab6e61
 
 ### Choose AMI
 
-In the AWS web console, select the EC2 dashboard. On the right hand side under images, click on the AMIs tab.  Select the rancher-master image and click on Launch button.
+In the AWS web console, select the EC2 dashboard. On the right-hand side under images, click on the AMIs tab.  Select the rancher-master image and click on Launch button.
 
 ![Choose AMI](../images/selenium/AMI-racher-master.png "Choose AMI")
 
 ### Choose Instance Type
 
-Select the t2.micro (free tier elidible) and click on the Review and Launch button.
+Select the t2.micro (free tier eligible) and click on the Review and Launch button.
 
 ![Choose Instance Type](../images/selenium/AMI-review-launch.png "Choose Instance Type")
 
@@ -896,7 +891,7 @@ Review the information and click on the Launch button.
 
 ![Review](../images/selenium/AMI-launch.png "Review")
 
-A window will pop up abd ask for a key pair. In our case, we will make a new key pair called slenium-grid. Click the Download Key Pair button and save the .pem file to a safe and secure location as you will not be able to download it a second time.
+A window will pop up and ask for a key pair. In our case, we will make a new key pair called slenium-grid. Click the Download Key Pair button and save the .pem file to a safe and secure location as you will not be able to download it a second time.
 
 ![Key Pair](../images/selenium/AMI-launch-keypair2.png "Key Pair")
 
@@ -906,7 +901,7 @@ Once the key pair .pem file is download, click on the Launch Instances button.
 
 ![Status](../images/selenium/AMI-launch-status.png "Status")
 
-### Verify the Docker contianer on the EC2 host
+### Verify the Docker container on the EC2 host
 
 Select the Instances tab and wait for the instance to be ready. The EC2 machine will boot up and run rancher server container on port 8080. This can approximately take 3-5 minutes.
 
@@ -961,7 +956,7 @@ Enter the account information (region, access key and secret key) and click the 
 
 ![Account Information](../images/selenium/amazon-ec2.png "Account Information")
 
-Fill in the the availabilty zone and VPC and click the Next: Select a Security Group button
+Fill in the the availability zone and VPC and click the Next: Select a Security Group button
 
 ![Availability Zone & VPC](../images/selenium/network.png "Availability Zone & VPC")
 
@@ -982,7 +977,7 @@ Under the Default tab, select Management Environments.
 
 ![Management Environments](../images/selenium/management-environments.png "Management Environments")
 
-Click on the Add Environment button, enter a name and description in the text boxes and click on the Creat button
+Click on the Add Environment button, enter a name and description in the text boxes and click on the Create button
 
 ![Add Environment](../images/selenium/add-environment.png "Add Environment")
 
@@ -990,7 +985,15 @@ Select the STACKS tab
 
 ![STACKS](../images/selenium/stacks.png "STACKS")
 
-Click on the Add Stack button, enter a name, description, and the following yml text information in the each text box and click on the Creat button.
+Click on the Add Stack button, enter a name, description, and the following yml text information in each text box and click on the Create button.
+
+The yml files adds services for creating SeleniumGrid Stack:
+
+	1 container for Selenium Hub
+	1 container for Chrome Node
+	1 container for Firefox Node
+
+NOTE: This could be done manually if desired.
 
 Docker-compose.yml contents:
 
@@ -1040,14 +1043,6 @@ services:
 
 ```
 
-The yml files adds services for creating SeleniumGrid Stack:
-
-1 container for Selenium Hub
-1 container for Chrome Node
-1 container for Firefox Node
-
-NOTE: This could be done manually if desired.
-
 Wait for the stack to be ready and active.
 
 Unhealthy stacks
@@ -1064,11 +1059,11 @@ Selenium Grid Container Information:
 
 NOTE: If you want to scale out services of WebDrivers increase Scale count
 
-Selenium Grid Dashbaord:
+Selenium Grid Dashboard:
 
 As you can see Selenium Hub is attached with one Chrome and one Firefox WebDriver instance.
 
-![Selenium Grid Dashbaord](../images/selenium/sg-dashbaord.png "Selenium Grid Dashbaord")
+![Selenium Grid Dashboard](../images/selenium/sg-dashbaord.png "Selenium Grid Dashboard")
 
 # Conclusion
 
