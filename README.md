@@ -7,6 +7,7 @@
 - Application Factory
 - Celery with RabbitMQ
 - Selenium grid on AWS
+- Terraform and AWS
 - Unit testing Celery Tasks
 
 ## Code
@@ -15,4 +16,5 @@
 - Celery with RabbitMQ Demo
 - CicleCI Demo
 - Selenium Grid 
+- Terraform
 - Unit testing Celery Tasks Demo
