@@ -45,7 +45,7 @@ variable "ami" {
 
 /* A multi
    line comment. */
-resource "aws_instance" "web" {
+resource "aws_instance" "ec2_instance" {
   ami               = "${var.ami}"
   count             = 2
   source_dest_check = false
@@ -96,7 +96,7 @@ The most important thing you'll configure with Terraform are resources. Resource
 
 A resource configuration looks like the following:
 
-    resource "aws_instance" "web" {
+    resource "aws_instance" "ec2_instance" {
       ami           = "ami-408c7f28"
       instance_type = "t1.micro"
     }
@@ -119,8 +119,8 @@ Every data source in Terraform is mapped to a provider based on longest-prefix m
 A data source configuration looks like the following:
 
 ```
-# Find the latest available AMI that is tagged with Component = web
-data "aws_ami" "web" {
+# Find the latest available AMI that is tagged with Component = ec2_instance
+data "aws_ami" "ec2_instance" {
   filter {
     name   = "state"
     values = ["available"]
@@ -128,7 +128,7 @@ data "aws_ami" "web" {
 
   filter {
     name   = "tag:Component"
-    values = ["web"]
+    values = ["ec2_instance"]
   }
 
   most_recent = true
@@ -141,8 +141,8 @@ Within the block (the { }) is configuration for the data instance. The configura
 
 Each data instance will export one or more attributes, which can be interpolated into other resources using variables of the form data.TYPE.NAME.ATTR. For example:
 
-    resource "aws_instance" "web" {
-      ami           = "${data.aws_ami.web.id}"
+    resource "aws_instance" "ec2_instance" {
+      ami           = "${data.aws_ami.ec2_instance.id}"
       instance_type = "t1.micro"
     }
 
@@ -272,6 +272,24 @@ The -var-file flag can be used multiple times per command invocation:
 
     $ terraform apply -var-file=foo.tfvars -var-file=bar.tfvars
 
+### Output
+
+Outputs define values that will be highlighted to the user when Terraform applies, and can be queried easily using the output command. 
+
+Terraform knows a lot about the infrastructure it manages. Most resources have attributes associated with them, and outputs are a way to easily extract and query that information.
+
+A simple output configuration looks like the following:
+
+    output "address" {
+      value = "${aws_instance.db.public_dns}"
+    }
+
+This will output a string value corresponding to the public DNS address of the Terraform-defined AWS instance named "db". It is possible to export complex data types like maps and lists as well:
+
+    output "addresses" {
+      value = ["${aws_instance.web.*.public_dns}"]
+    }
+
 Let's start!
 
 ---
@@ -286,7 +304,7 @@ NOTE: It is safe to run this command multiple times.
 
 In a folder, we will start by defining a aws_resource.tf file as follows:
 
-    resource "aws_instance" "web" {
+    resource "aws_instance" "ec2_instance" {
       ami           = "ami-0cf31d971a3ca20d6"
       instance_type = "t2.micro"
     }
@@ -384,7 +402,7 @@ Resource actions are indicated with the following symbols:
 
 Terraform will perform the following actions:
 
-  + aws_instance.web
+  + aws_instance.ec2_instance
       id:                           <computed>
       ami:                          "ami-0cf31d971a3ca20d6"
       arn:                          <computed>
@@ -448,7 +466,7 @@ Resource actions are indicated with the following symbols:
 
 Terraform will perform the following actions:
 
-  + aws_instance.web
+  + aws_instance.ec2_instance
       id:                           <computed>
       ami:                          "ami-0cf31d971a3ca20d6"
       arn:                          <computed>
@@ -498,7 +516,7 @@ Further output:
 ```
   Enter a value: yes
 
-aws_instance.web: Creating...
+aws_instance.ec2_instance: Creating...
   ami:                          "" => "ami-09c624b6cc0ab6e61"
   arn:                          "" => "<computed>"
   associate_public_ip_address:  "" => "<computed>"
@@ -529,10 +547,10 @@ aws_instance.web: Creating...
   tenancy:                      "" => "<computed>"
   volume_tags.%:                "" => "<computed>"
   vpc_security_group_ids.#:     "" => "<computed>"
-aws_instance.web: Still creating... (10s elapsed)
-aws_instance.web: Still creating... (20s elapsed)
-aws_instance.web: Still creating... (30s elapsed)
-aws_instance.web: Creation complete after 34s (ID: i-0a2e7eb36434b5bd8)
+aws_instance.ec2_instance: Still creating... (10s elapsed)
+aws_instance.ec2_instance: Still creating... (20s elapsed)
+aws_instance.ec2_instance: Still creating... (30s elapsed)
+aws_instance.ec2_instance: Creation complete after 34s (ID: i-0a2e7eb36434b5bd8)
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
@@ -541,6 +559,12 @@ Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 NOTE: Ine the EC2 Dashbboard, you should see the instance now running.
 
 In the folder where the .tf files were created, Terraform has generatred a terraform.tfstate file. This file records the configuration state of the applied plan. 
+
+Once this instance is created, we want to get its IP address for future use as the output variable. Output variables act as a way to organize data to be easily queried and shown back to the Terraform user.
+
+    output “ip” {
+     value = “${aws_instance.ec2_instance.public_ip}”
+    }
 
 ## Terraform destroy
 
@@ -561,7 +585,7 @@ Resource actions are indicated with the following symbols:
 
 Terraform will perform the following actions:
 
-  - aws_instance.web
+  - aws_instance.ec2_instance
 
 
 Plan: 0 to add, 0 to change, 1 to destroy.
@@ -581,15 +605,15 @@ Further output:
 ```
   Enter a value: yes
 
-aws_instance.web: Destroying... (ID: i-0a2e7eb36434b5bd8)
-aws_instance.web: Still destroying... (ID: i-0a2e7eb36434b5bd8, 10s elapsed)
-aws_instance.web: Still destroying... (ID: i-0a2e7eb36434b5bd8, 20s elapsed)
-aws_instance.web: Still destroying... (ID: i-0a2e7eb36434b5bd8, 30s elapsed)
-aws_instance.web: Still destroying... (ID: i-0a2e7eb36434b5bd8, 40s elapsed)
-aws_instance.web: Still destroying... (ID: i-0a2e7eb36434b5bd8, 50s elapsed)
-aws_instance.web: Still destroying... (ID: i-0a2e7eb36434b5bd8, 1m0s elapsed)
-aws_instance.web: Still destroying... (ID: i-0a2e7eb36434b5bd8, 1m10s elapsed)
-aws_instance.web: Destruction complete after 1m12s
+aws_instance.ec2_instance: Destroying... (ID: i-0a2e7eb36434b5bd8)
+aws_instance.ec2_instance: Still destroying... (ID: i-0a2e7eb36434b5bd8, 10s elapsed)
+aws_instance.ec2_instance: Still destroying... (ID: i-0a2e7eb36434b5bd8, 20s elapsed)
+aws_instance.ec2_instance: Still destroying... (ID: i-0a2e7eb36434b5bd8, 30s elapsed)
+aws_instance.ec2_instance: Still destroying... (ID: i-0a2e7eb36434b5bd8, 40s elapsed)
+aws_instance.ec2_instance: Still destroying... (ID: i-0a2e7eb36434b5bd8, 50s elapsed)
+aws_instance.ec2_instance: Still destroying... (ID: i-0a2e7eb36434b5bd8, 1m0s elapsed)
+aws_instance.ec2_instance: Still destroying... (ID: i-0a2e7eb36434b5bd8, 1m10s elapsed)
+aws_instance.ec2_instance: Destruction complete after 1m12s
 
 Destroy complete! Resources: 1 destroyed.
 ```
