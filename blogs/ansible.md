@@ -8,7 +8,7 @@ published: True
 # Overview
 
 In this blog, I will describe some of the fundamentals concepts of Ansible.  
-NOTE:This blog assume the reader has an understanding of the YAML syntax.
+NOTE: This blog assume the reader has an understanding of the YAML syntax.
 
 ## Installation
 
@@ -213,7 +213,7 @@ hosts:
     [web]
     host1.example.org
 
-Files and folder structure:
+Files and folders structure:
 
 ```
 ├── apache.yml
@@ -295,7 +295,7 @@ Note the changed field, it is now 0, which is absolutely normal and is one of th
 To setp up a our virtualhost on our server, we will have to remove the default virtualhost, send our virtualhost, activate it and restart apache. 
 
 Created a folder called files. 
-Within the folder callf iles, create the following file name and virtualhost configuration content as follows:
+Within the folder call files, create the following file name and virtualhost configuration content as follows:
 
 awesome-app:
 
@@ -343,7 +343,19 @@ apache.yml
           service: name=apache2 state=restarted
 ```
 
-Files and folder structure:
+#### File module
+
+src: path of the file to link to (applies only to *state=link* and *state=hard*). Will accept absolute, relative and nonexisting paths. 
+
+state: If *directory*, all intermediate subdirectories will be created if they do not exist. If *file*, the file will NOT be created if it does not exist. If *link*, the symbolic link will be created or changed. Use *hard* for hardlinks. If *absent*, directories will be recursively deleted, and files or symlinks will be unlinked. Note that *absent* will not cause *file* to fail if the *path* does not exist as the state did not change. If *touch*, an empty file will be created if the path does not exist, while an existing file or directory will receive updated file access and modification times.
+  
+These ‘notify’ actions are triggered at the end of each block of tasks in a play, and will only be triggered once even if notified by multiple different tasks. For instance, multiple resources may indicate that apache needs to be restarted because they have changed a config file, but apache will only be bounced once to avoid unnecessary restarts. 
+
+Handlers is task(s), not really any different from regular task. They are referenced by a globally unique name and are notified by notifiers. If nothing notifies a handler, it will not run. Regardless of how many tasks notify a handler, it will run only once, after all of the tasks complete in a particular play
+
+Enabling the virtual host within Apache via manually symlinking the config file into /etc/apache2/sites-enabled/.
+
+Files and folders structure:
 
 ```
 ├── apache.yml
@@ -356,9 +368,129 @@ Run the following command to execute our playbook:
 
     ansible-playbook -i hosts -l host1.example.org apache.yml 
 
+Output:
 
+```
+PLAY [web] *********************
 
+TASK [Gathering Facts] *********************
+ok: [host1.example.org]
 
+TASK [Installs apache web server] *********************
+ok: [host1.example.org]
+
+TASK [Push default virtual host configuration] *********************
+changed: [host1.example.org]
+
+TASK [Disable the default virtualhost] *********************
+changed: [host1.example.org]
+
+TASK [Disable the default ssl virtualhost] *********************
+ok: [host1.example.org]
+
+TASK [Activates our virtualhost] *********************
+changed: [host1.example.org]
+
+RUNNING HANDLER [restart apache] *********************
+changed: [host1.example.org]
+
+PLAY RECAP *********************
+host1.example.org          : ok=7    changed=4    unreachable=0    failed=0   
+
+```
+
+### Apahe example - Failure
+
+In production, we want to make sure our servers are only restart say if our configuraiton is correct. Ansible has a nifty feature to stop all processes if something goes wrong. We'll take advantage of this feature to stop our playbook if the configuraiton is not valid.
+
+I have altered the awesome-app file with a typo as follows:
+
+awesome-app:
+
+```
+<VirtualHost *:80>
+  ToortnemucoD /var/www/awesome-app
+
+  Options -Indexes
+
+  ErrorLog /var/log/apache2/error.log
+  TransferLog /var/log/apache2/access.log
+</VirtualHost>
+```
+
+To ensure when a task fails, the processes stops, we will ensure that the configuration is valid before restarting the server. We  also start by adding our virtualhost before removing the default virtualhost, so a subsequent restart (possibly done directly on the server) won't break apache. 
+
+Update the playbook with the following content:
+
+apache.yml
+
+```
+    - hosts: web
+      tasks:
+        - name: Installs apache web server
+          apt: pkg=apache2 state=installed update_cache=true
+
+        - name: Push future default virtual host configuration
+          copy: src=files/awesome-app dest=/etc/apache2/sites-available/awesome-app.conf mode=0640
+
+        - name: Activates our virtualhost
+          command: a2ensite awesome-app
+
+        - name: Check that our config is valid
+          command: apache2ctl configtest
+        
+        - name: Deactivates the default virtualhost
+          command: a2dissite 000-default
+
+        - name: Deactivates the default ssl virtualhost
+          command: a2dissite default-ssl
+          notify: 
+            - restart apache
+
+      handlers:
+        - name: restart apache
+          service: name=apache2 state=restarted
+```
+
+### Command module
+
+The command module takes the command name followed by a list of space-delimited arguments. The given command will be executed on all selected nodes. It will not be processed through the shell, so variables like $HOME and operations like "<", ">", "|", ";" and "&" will not work (use the shell module if you need these features).
+
+Enabling the virtual host within Apache via a2ensite awesome-app.
+
+Run the following command to execute our playbook: 
+
+    ansible-playbook -i hosts -l host1.example.org apache.yml
+
+Output:
+
+```
+PLAY [web] *********************
+
+TASK [Gathering Facts] *********************
+ok: [host1.example.org]
+
+TASK [Installs apache web server] *********************
+ok: [host1.example.org]
+
+TASK [Push future default virtual host configuration] *********************
+changed: [host1.example.org]
+
+TASK [Activates our virtualhost] *********************
+changed: [host1.example.org]
+
+TASK [Check that our config is valid] *********************
+fatal: [host1.example.org]: FAILED! => {"changed": true, "cmd": ["apache2ctl", "configtest"], "delta": "0:00:00.028736", "end": "2018-11-15 18:20:00.194825", "failed": true, "msg": "non-zero return code", "rc": 1, "start": "2018-11-15 18:20:00.166089", "stderr": "AH00526: Syntax error on line 2 of /etc/apache2/sites-enabled/awesome-app.conf:\nInvalid command 'RocumentDoot', perhaps misspelled or defined by a module not included in the server configuration", "stderr_lines": ["AH00526: Syntax error on line 2 of /etc/apache2/sites-enabled/awesome-app.conf:", "Invalid command 'RocumentDoot', perhaps misspelled or defined by a module not included in the server configuration"], "stdout": "Action 'configtest' failed.\nThe Apache error log may have more information.", "stdout_lines": ["Action 'configtest' failed.", "The Apache error log may have more information."]}
+    to retry, use: --limit @/root/workspace/apache.retry
+
+PLAY RECAP *********************
+host1.example.org          : ok=4    changed=2    unreachable=0    failed=1   
+
+```
+
+As you can see since apache2ctl returns with an exit code of 1 when it fails, ansible is aware of it and stops processing. 
+
+Based on this failure, how do we revert back to a good state?
 
 
 
