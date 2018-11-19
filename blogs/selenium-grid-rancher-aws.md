@@ -1,5 +1,5 @@
 ---
-title: Selenium Grid on AWS
+title: Building a Selenium Grid on AWS EC2 instances using Rancher
 author: Michael Yee
 published: True
 ---
@@ -7,7 +7,7 @@ published: True
 
 # Overview
 
-In this blog, I will describe how I would spin up a Selenium grid on AWS.
+In this blog, I will describe how I would spin up a Selenium grid on AWS EC2 instances using Rancher.
 
 ## What Is Selenium & Selenium Grid?
 

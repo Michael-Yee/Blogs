@@ -1,0 +1,59 @@
+---
+# tasks file for roles/selenium-grid-terminate
+
+- name: Gather Selenium Hub EC2 instances facts
+  ec2_instance_facts:
+    region: "{{ region }}"
+    filters:
+      "tag:Type": "selenium_hub"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+  register: ec2
+# - debug: var=ec2
+
+- name: Terminate Selenium Hub EC2 Instance(s)
+  ec2:
+    instance_ids: '{{ item.instance_id }}'
+    state: absent
+    region: "{{ region }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+  with_items: "{{ ec2.instances }}"
+
+- name: Gather Selenium Chrome Node EC2 instances facts
+  ec2_instance_facts:
+    region: "{{ region }}"
+    filters:
+      "tag:Type": "selenium_chrome_node"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+  register: ec2
+# - debug: var=ec2
+
+- name: Terminate Selenium Chrome Node EC2 Instance(s)
+  ec2:
+    instance_ids: '{{ item.instance_id }}'
+    state: absent
+    region: "{{ region }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+  with_items: "{{ ec2.instances }}"
+
+- name: Gather Selenium Firefox Node EC2 instances facts
+  ec2_instance_facts:
+    region: "{{ region }}"
+    filters:
+      "tag:Type": "selenium_firefox_node"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+  register: ec2
+# - debug: var=ec2
+
+- name: Terminate Selenium Firefox Node EC2 Instance(s)
+  ec2:
+    instance_ids: '{{ item.instance_id }}'
+    state: absent
+    region: "{{ region }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+  with_items: "{{ ec2.instances }}"

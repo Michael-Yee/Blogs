@@ -1,0 +1,7 @@
+- hosts: local
+  connection: local
+  gather_facts: False
+  vars_files:
+    - "{{ aws_access_secret_keys }}"
+  roles:
+    - { role: selenium-grid-terminate }

@@ -6,7 +6,8 @@
 - Flask Blueprints
 - Application Factory
 - Celery with RabbitMQ
-- Selenium grid on AWS
+- Selenium grid on AWS using Ansible
+- Selenium grid on AWS using Rancher
 - Terraform and AWS
 - Unit testing Celery Tasks
 
@@ -15,6 +16,7 @@
 - Ansible Container Demo
 - Celery with RabbitMQ Demo
 - CicleCI Demo
-- Selenium Grid 
+- Selenium Grid using Ansible
+- Selenium Grid using Rancher
 - Terraform
 - Unit testing Celery Tasks Demo
