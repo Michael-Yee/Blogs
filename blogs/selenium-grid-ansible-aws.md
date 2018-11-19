@@ -49,7 +49,7 @@ Download instructions can be found [here](https://docs.ansible.com/ansible/lates
     ansible --version
 
 
-###Boto3 
+### Boto3 
 
 Boto3 is the Amazon Web Services (AWS) Software Development Kit (SDK) for Python, which allows Ansible to communiate with the AWS API.
 
@@ -61,33 +61,9 @@ To verify that boto3 installed properly, run the following command:
 
     python -c "import boto3; print(boto3.__version__)"
 
-Note which python you have installed boto3 onto by running this command:
+Note the path of which python you have installed boto3 onto by running this command:
 
   which python
-
-## Identity Access Management (IAM)
-
-### Groups
-
-We need to create Group to define policies like users to have EC2FullAccess rights.
-
-![Set Group Name](../images/selenium/set_group_name.png "Set Group Name")
-
-![Attach Policy](../images/selenium/attach_policy.png "Attach Policy")
-
-![Create Group](../images/selenium/create_group.png "Create Group")
-
-### Users
-
-We need to create User for programmatic access and add this user to Group that we created above.
-
-![Set User Details](../images/selenium/set_user_details.png "Set User Details")
-
-![Set Permissions](../images/selenium/set_permisssions.png "Set Permissions")
-
-![Create User](../images/selenium/create_user.png "Create User")
-
-After you have created a User, the fourth page will generate an Access key ID and Secret access key used for AWS API, CLI, SDK and other development tools... Save these keys!
 
 ## Ansible vault
 
@@ -128,7 +104,9 @@ The file can be decrypted back to plaintext. Run the following command:
     ansible-vault decrypt group_vars/aws_access_secret_keys.yml 
     Vault password:
 
-## roles
+---
+
+## Roles
 
 We will initalize the roles with ansible-galaxy.  First we need to create the roles folder:
 
@@ -140,7 +118,7 @@ Next, run the following command:
     ansible-galaxy --offline init roles/selenium-chrome-node
     ansible-galaxy --offline init roles/selenium-firefox-node
 
-## hosts file
+## Hosts file
 
 The hosts file to handle our new EC2 instance that has yet to be created. Create the hosts file with the following content:
 
@@ -149,7 +127,7 @@ The hosts file to handle our new EC2 instance that has yet to be created. Create
 localhost ansible_python_interpreter=<PATH/TO/PYTHON>
 ```
 
-## variables
+## Variables
 
 The all file to store all our vairables that has yet to be created. First we need to create the group_vars folder:
 
@@ -167,7 +145,6 @@ all:
 aws_access_secret_keys: group_vars/aws_access_secret_keys.yml
 keypair: selenium-grid
 region: us-east-1
-security_group: selenium-grid-node-sg
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Selenium Hub Variables
@@ -176,6 +153,7 @@ security_group: selenium-grid-node-sg
 selenium_hub_count: 1
 selenium_hub_image: ami-0dacf8938d3920488
 selenium_hub_instance_type: t2.micro
+selenium_hub_security_group: selenium-grid-hub-sg
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Selenium Chrome Node Variables
@@ -184,14 +162,17 @@ selenium_hub_instance_type: t2.micro
 selenium_chrome_node_count: 1
 selenium_chrome_node_image: ami-0075c96fd0f7e4109
 selenium_chrome_node_instance_type: t2.micro
+selenium_chrome_node_security_group: selenium-grid-node-sg
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Selenium Firefox Node Variables
 # ---------------------------------------------------------------------------------------------------------------------
 
 selenium_firefox_node_count: 1
-selenium_firefox_node_image: ami-0075c96fd0f7e4109
+selenium_firefox_node_image: ami-0da1b57897ae4e715
 selenium_firefox_node_instance_type: t2.micro
+selenium_firefox_node_security_group: selenium-grid-node-sg
+
 
 ```
 
@@ -209,31 +190,52 @@ The image specifies a AMI (Amazon Machine Image). These are AMI I have previousl
 
 The instace type is t2.micro, this is suitable for our lab. It’s also eligible for the free tier, in which Amazon will not charge you for some services (including selected EC2 instance types) for a period of 1 year.
 
-A security group acts as a virtual firewall for your instance to control inbound and outbound traffic. This is a security group I have previously created.
+A security group acts as a virtual firewall for your instance to control inbound and outbound traffic.
 
-NOTE: If the security group did not exist, one could create a task to create the security grop as follows:
+NOTE: If the security groups did not exist, one could create a task to create the security grop as follows:
+
+tasks:
 
 ```
-tasks:
-    - name: Create a security group
-      ec2_group:
-        name: "{{ security_group }}"
-        description: The Selenium Hub security group
-        region: "{{ region }}"
-        aws_access_key: "{{ aws_access_key }}"
-        aws_secret_key: "{{ aws_secret_key }}"
-        rules:
-          - proto: tcp
-            from_port: 22
-            to_port: 22
-            cidr_ip: 0.0.0.0/0
-          - proto: tcp
-            from_port: 4444
-            to_port: 4444
-            cidr_ip: 0.0.0.0/0
-        rules_egress:
-          - proto: all
-            cidr_ip: 0.0.0.0/0
+- name: Create Selenium Hub security group
+  ec2_group:
+    name: "{{ selenium_hub_security_group }}"
+    description: Selenium Hub security group
+    region: "{{ region }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 4444
+        to_port: 4444
+        cidr_ip: 0.0.0.0/0
+    rules_egress:
+      - proto: all
+        cidr_ip: 0.0.0.0/0
+
+- name: Create Selenium Chrome Node security group
+  ec2_group:
+    name: "{{ selenium_chrome_node_security_group }}"
+    description: Selenium Chrome Node security group
+    region: "{{ region }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 5555
+        to_port: 5555
+        cidr_ip: 0.0.0.0/0
+    rules_egress:
+      - proto: all
+        cidr_ip: 0.0.0.0/0
 ```
 
 We use the ec2_group module provided natively by Ansible. The module requires a name, region and description for the security group. 
@@ -461,7 +463,7 @@ main.yml:
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
     count: "{{ selenium_chrome_node_count }}"
-    group: "{{ security_group }}"
+    group: "{{ selenium_chrome_node_security_group }}"
     instance_type: "{{ selenium_chrome_node_instance_type }}"
     image: "{{ selenium_chrome_node_image }}"
     keypair: "{{ keypair }}"
@@ -507,7 +509,7 @@ main.yml:
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
     count: "{{ selenium_firefox_node_count }}"
-    group: "{{ security_group }}"
+    group: "{{ selenium_firefox_node_security_group }}"
     instance_type: "{{ selenium_firefox_node_instance_type }}"
     image: "{{ selenium_firefox_node_image }}"
     keypair: "{{ keypair }}"

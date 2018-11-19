@@ -6,7 +6,7 @@
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
     count: "{{ selenium_chrome_node_count }}"
-    group: "{{ security_group }}"
+    group: "{{ selenium_chrome_node_security_group }}"
     instance_type: "{{ selenium_chrome_node_instance_type }}"
     image: "{{ selenium_chrome_node_image }}"
     keypair: "{{ keypair }}"
