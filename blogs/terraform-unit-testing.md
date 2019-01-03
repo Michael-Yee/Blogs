@@ -33,7 +33,7 @@ The [standard module structure](https://www.terraform.io/docs/modules/create.htm
 │   │  ├─ terraform_EC2_example_test.go
 │   
 ├── modules
-	├─ ec2
+    ├─ ec2
     │  ├─ README.md
     │  ├─ main.tf
     │  ├─ outputs.tf
