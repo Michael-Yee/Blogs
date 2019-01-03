@@ -46,7 +46,7 @@ The [standard module structure](https://www.terraform.io/docs/modules/create.htm
 
 main.tf
 
-'''
+```
 # ---------------------------------------------------------------------------------------------------------------------
 # DEPLOY AN EC2 INSTANCE RUNNING RABBITMQ
 # ---------------------------------------------------------------------------------------------------------------------
@@ -79,7 +79,7 @@ data "aws_ami" "rabbitmq_ami" {
   }
 }
 
-'''
+```
 
 outputs.tf
 ```
@@ -188,7 +188,7 @@ func TestTerraformAwsExample(t *testing.T) {
 
 If your infrastructure is as simple as spinning up an EC2 instance, maybe "eyeballing" it with *terraform plan* is all you need. This command is a convenient way to check whether the execution plan for a set of changes matches your expectations without making any changes to real resources or to the state. 
 
-
+```
 Advantages: 
     Quick development time 
     Shallow learning curve
@@ -196,6 +196,7 @@ Advantages:
 Disadvantages:
     Hard to spot mistakes
     Scaling issues
+```
 
 ---
 
@@ -211,7 +212,7 @@ Over the Xmas break, I went searching for a tool to that could test the Terrafor
 
 [Terratest](https://github.com/gruntwork-io/terratest) is a Go library that makes it easier to write automated tests for Terraform code. It provides a variety of helper functions and patterns for common infrastructure testing tasks.
 
-In the end, I have decided to put some time into learning Terratest due to various reasons... open sourced, decent documentation, current and well maintained, etc...
+In the end, I have decided to put some time into learning Terratest due to various reasons... open source, decent documentation, current and well maintained, etc...
 
 
 ## Test Strategy TWO: Terratest
@@ -330,6 +331,7 @@ ok      _/Users/michael/Blogs/code/terraform-testing-demo/tests/ec2   89.789s
 
 NOTE:  Multiply test could be run in parallel using Terratest
 
+```
 Advantages:
     Environments can be spun up with ease
     Documents the infrastructure
@@ -339,6 +341,7 @@ Disadvantages:
     Super slow
     AWS costs
     Who know Go around here?
+```
 
 
 # Conclusion
