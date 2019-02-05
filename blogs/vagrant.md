@@ -7,9 +7,9 @@ published: True
 
 # Overview
 
-In this blog, I will describe how to setup and teardown Vagrant locally on MacOS and upon AWS.
+In this blog, I will describe how to setup and teardown Vagrant locally on MacOS and AWS.
 
-NOTE: This blog assume the reader has an understanding AWS cloud platform
+NOTE: This blog assume the reader has an understanding of AWS
 
 ## Background
 
@@ -40,11 +40,11 @@ Homebrew is an open-source software package management system that simplifies th
 VirtualBox
 ---
 
-The following is the single command required to install Virtual on macOS using Homebrew
+The following is the single command required to install VirtualBox on macOS using Homebrew
 
     $ brew cask install virtualbox
 
-The following will is the single command required to verify Vagrant is installated
+The following will is the single command required to verify VirtualBox is installated
 
     $ virtualbox --help
 
@@ -67,7 +67,7 @@ The following is the single command required to install vagrant-aws
 
     $ vagrant plugin install vagrant-aws
 
-The following will is the single command required to verify the plugin is installated
+The following will is the single command required to list all plugins installated
 
     $ vagrant plugin list
 
