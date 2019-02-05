@@ -10,6 +10,7 @@
 - Selenium grid on AWS using Rancher
 - Terraform and AWS
 - Unit testing Celery Tasks
+- Vagrant for dummies
 
 ## Code
 
