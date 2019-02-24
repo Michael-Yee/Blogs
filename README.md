@@ -17,6 +17,7 @@
 - Ansible Container Demo
 - Celery with RabbitMQ Demo
 - CicleCI Demo
+- Generic Receipt Parser Service
 - Selenium Grid using Ansible
 - Selenium Grid using Rancher
 - Terraform
