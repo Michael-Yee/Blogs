@@ -6,6 +6,7 @@
 - Flask Blueprints
 - Application Factory
 - Celery with RabbitMQ
+- D is for Django 
 - Selenium grid on AWS using Ansible
 - Selenium grid on AWS using Rancher
 - Terraform and AWS
