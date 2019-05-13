@@ -1,0 +1,34 @@
+---
+########################################################
+# Set up Firewall
+########################################################
+
+- name: permit port 9200 for elasticsearch REST 
+  firewalld: 
+    port: 9200/tcp
+    state: enabled
+    permanent: yes
+
+- name: permit port 9200 for elasticsearch node communication
+  firewalld: 
+    port: 9300/tcp
+    state: enabled
+    permanent: yes
+
+- name: permit port 5400 for logstash
+  firewalld: 
+    port: 5044/tcp
+    state: enabled
+    permanent: yes
+
+- name: permit port 5601 for kibana
+  firewalld: 
+    port: 5601/tcp
+    state: enabled
+    permanent: yes
+
+- name: restart firewalld service
+  systemd:
+    name: firewalld
+    state: restarted
+    

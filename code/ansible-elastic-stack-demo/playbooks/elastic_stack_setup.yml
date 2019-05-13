@@ -1,0 +1,16 @@
+---
+# This playbook is for setting up elastic stack
+# You can run this playbook with the following command:
+# sudo ansible-playbook -i hosts/elastic.hosts playbooks/elastic_stack_setup.yaml
+
+- hosts: elk_stack
+  connection: local
+  remote_user: root
+  become: true
+  roles:
+    - role: java
+    - role: elastic_stack
+    - role: elasticsearch
+    - role: kibana
+    - role: logstash
+    - role: firewall

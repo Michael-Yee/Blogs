@@ -1,0 +1,29 @@
+---
+########################################################
+# Set up Kibana
+########################################################
+
+
+- name: Install kibana
+  yum: 
+    name: kibana
+    state: latest 
+    update_cache: yes
+
+- name: Create kibana config
+  template:
+    src: kibana.config.j2
+    dest: /etc/kibana/kibana.yml
+
+- name: Force systemd to reread configs
+  systemd: daemon_reload=yes
+
+- name: Enable kibana.service
+  systemd:
+    name: kibana.service
+    enabled: yes
+
+- name: Start kibana.service
+  systemd: 
+    name: kibana.service
+    state: restarted

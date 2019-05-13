@@ -1,0 +1,12 @@
+# This playbook is for setting up filebeat
+# You can run this playbook with the following command:
+# sudo ansible-playbook -i hosts/elastic.hosts playbooks/filebeat.yml
+
+- hosts: filebeat
+  connection: local
+  remote_user: root
+  become: true
+  roles:
+    - role: elastic_stack
+    - role: filebeat
+

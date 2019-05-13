@@ -1,0 +1,6 @@
+---
+########################################################
+# Application and server variables
+########################################################
+elasticsearch_cluster_name: cluster
+elasticsearch_node_name: node

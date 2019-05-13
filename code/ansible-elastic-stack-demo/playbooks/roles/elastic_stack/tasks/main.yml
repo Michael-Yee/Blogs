@@ -1,0 +1,15 @@
+---
+########################################################
+# Prepare to setup Elastic Stack
+########################################################
+
+- name: Install the public signing key
+  rpm_key: 
+    key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    state: present
+
+- name: Create elasticsearch repository
+  template:
+    src: elasticsearch.repo.j2
+    dest: /etc/yum.repos.d/elasticsearch.repo
+    mode: 0644

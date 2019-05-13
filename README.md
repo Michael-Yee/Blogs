@@ -16,6 +16,7 @@
 ## Code
 
 - Ansible Container Demo
+- Ansible Playbook For Elastic Stack (Elasticsearch, Logstash, Kibana, Beats)
 - Celery with RabbitMQ Demo
 - CicleCI Demo
 - Generic Receipt Parser Service

@@ -1,0 +1,14 @@
+[elk_stack]
+127.0.0.1
+
+[elasticsearch]
+127.0.0.1
+
+[kibana]
+127.0.0.1
+
+[logstash]
+127.0.0.1
+
+[filebeat]
+127.0.0.1

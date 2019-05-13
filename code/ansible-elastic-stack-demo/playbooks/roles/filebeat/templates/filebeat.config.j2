@@ -1,0 +1,28 @@
+#=========================== Filebeat inputs =============================
+
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /var/log/*.log
+    - /var/log/messages
+
+#============================= Filebeat modules ===============================
+
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+
+#==================== Elasticsearch template setting ==========================
+
+#setup.template.settings:
+#  index.number_of_shards: 3
+
+#----------------------------- Kibana output --------------------------------
+
+#setup.kibana:
+#  host: "localhost:5601"
+
+#----------------------------- Logstash output --------------------------------
+output.logstash:
+  hosts: ["localhost:5044"]

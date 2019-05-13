@@ -1,0 +1,28 @@
+---
+########################################################
+# Set up ElasticSearch
+########################################################
+
+- name: Install elasticsearch
+  yum: 
+    name: elasticsearch
+    state: latest 
+    update_cache: yes
+
+- name: Create elasticsearch config
+  template:
+    src: elasticsearch.config.j2
+    dest: /etc/elasticsearch/elasticsearch.yml
+
+- name: Force systemd to reread configs
+  systemd: daemon_reload=yes
+
+- name: Enable elasticsearch.service
+  systemd:
+    name: elasticsearch.service
+    enabled: yes
+
+- name: Start elasticsearch.service
+  systemd: 
+    name: elasticsearch.service
+    state: restarted
