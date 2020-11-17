@@ -8,7 +8,7 @@
 - Celery with RabbitMQ
 - D is for Django 
 - Docker or Vagrant for a software development environment?
-- Exploring .NET Core 3.x default logging - Part 1
+- Exploring .NET Core 3.x default logging
 - Selenium grid on AWS using Ansible
 - Selenium grid on AWS using Rancher
 - Terraform and AWS
