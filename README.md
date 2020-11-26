@@ -4,6 +4,7 @@
 ## Blogs:
 
 - .NET Core 3.x logging with Serilog
+- .NET Core 3.1 Web API basics
 - Application Factory
 - Celery with RabbitMQ
 - D is for Django 
