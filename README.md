@@ -5,6 +5,7 @@
 
 - .NET Core 3.x logging with Serilog
 - .NET Core 3.1 Web API basics
+- .NET Core 3.1 Web API using basics authentication
 - Application Factory
 - Celery with RabbitMQ
 - D is for Django 
