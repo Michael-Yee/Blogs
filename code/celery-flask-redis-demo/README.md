@@ -4,6 +4,7 @@ NOTE: This repo is a work in progress
 
 
 ## Gmail:
+
 Set less secure app access = ON
 
 ## Environment settings
