@@ -7,7 +7,9 @@ NOTE: This repo is a work in progress
 Set less secure app access = ON
 
 ## Environment settings
+
 set MAIL_USERNAME=MAIL_USERNAME@gmail.com
+
 set MAIL_PASSWORD=MAIL_PASSWORD
 
 ## Requirements
