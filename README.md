@@ -19,6 +19,7 @@
 - Ansible Container Demo
 - Ansible Playbook For Elastic Stack (Elasticsearch, Logstash, Kibana, Beats)
 - Celery with RabbitMQ Demo
+- Celery, Flask and Redis Demo
 - CicleCI Demo
 - Generic Receipt Parser Service
 - Selenium Grid using Ansible
