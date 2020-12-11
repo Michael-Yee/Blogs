@@ -7,7 +7,6 @@
 - Celery with RabbitMQ
 - D is for Django 
 - Docker or Vagrant for a software development environment?
-- Exploring .NET default logging
 - Flask Blueprints
 - Selenium grid on AWS using Ansible
 - Selenium grid on AWS using Rancher
