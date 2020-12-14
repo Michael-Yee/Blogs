@@ -11,6 +11,7 @@
 - Selenium grid on AWS using Ansible
 - Selenium grid on AWS using Rancher
 - Terraform and AWS
+- To TypeScript, or not to TypeScript, that is the question
 - Unit testing Celery Tasks
 - Vagrant for dummies
 
