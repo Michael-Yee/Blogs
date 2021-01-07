@@ -19,11 +19,12 @@ Apache Airflow (or simply Airflow) is an open source framework which allows one 
 
 An Airflow workflow is designed as a directed acyclic graph (DAG). 
 
-A DAG can be discribed as a division of tasks which can be executed independently.
+A DAG can be described as a division of tasks which can be executed independently.
 
 A Workflow is either scheduled or triggered by an event.
 
 ![Example Workflow](../images/airflow/example_workflow.png "Example Workflow")
+
 Figure 1:  Workflow example
 
 The workflow in the DAG above will perform following tasks:
@@ -31,7 +32,7 @@ The workflow in the DAG above will perform following tasks:
 1) Download the data from a single or various sources
 2) Send the data to be processed
 3) Monitor process till completion
-4) Retrive the resutls and generate the report(s)
+4) Retrieve the results and generate the report(s)
 5) Email the report(s)
 
 ## DAG - The basics
@@ -80,15 +81,16 @@ send_email = PythonOperator(
     dag=dag,
 )
 
+# Define order
 download_data >> send_data_to_processing >> monitor_processsing >> generate_report >> send_email
 ```
-NOTE: When designing Airflow operators, it’s important to keep in mind that they may be executed more than once. there for should be idempotent.
+NOTE: When designing Airflow operators, it’s important to keep in mind that they may be executed more than once. therefore should be idempotent.
 
 The above DAG snippet creates five operators: one DummyOperator (does nothing) and four PythonOperator which calls their defined methods when the task is executed
 
 # Conclusion
 
-ETL processes are plagued by inefficiencies, resulting in failed tasks leading to operational downtime.  In thie blog, the Apache Airflow framework was presented as a solution in creating, monitoring and scaling these critial data pipelines.
+ETL processes are plagued by inefficiencies, resulting in failed tasks leading to operational downtime.  In this blog, the Apache Airflow framework was presented as a solution in creating, monitoring and scaling these critical data pipelines.
 
 ---
 
@@ -117,10 +119,10 @@ NOTE: On November 2020, new version of PIP (20.3) has been released with a new, 
 ```
 $ airflow users create \
     --username admin \
-    --firstname Peter \
-    --lastname Parker \
+    --firstname Michael \
+    --lastname Yee \
     --role Admin \
-    --email spiderman@superhero.org
+    --email michael.yee@gmail.com
 ```
 
 5) Start the web server
@@ -163,9 +165,10 @@ This command takes 3 arguments: the name of the dag, the name of a task and a da
 
 ## Airflow UI
 
-When you nagivate to the Airflow UI in your browser, you should see a listed of DAGs in the Airflow UI.
+Nagivate to the Airflow UI in your browser, you should see a listed of DAGs in the Airflow UI.
 
 ![Airflow UI](../images/airflow/airflow_ui.png "Airflow UI")
+
 Figure 2: Airflow UI
 
 In order to start a DAG Run, first turn the workflow on (arrow 1), then click the Trigger Dag button (arrow 2) and finally, click on the Graph View (arrow 3) to see the progress of the run.
