@@ -19,7 +19,7 @@ Apache Airflow (or simply Airflow) is an open source framework which allows one 
 
 An Airflow workflow is designed as a directed acyclic graph (DAG). 
 
-A DAG can be described as a division of tasks which can be executed independently.
+A DAG can be described as a division of tasks which are executed independently.
 
 A Workflow is either scheduled or triggered by an event.
 
@@ -27,7 +27,7 @@ A Workflow is either scheduled or triggered by an event.
 
 Figure 1:  Workflow example
 
-The workflow in the DAG above will perform following tasks:
+In figure 1, the workflow will perform following tasks:
 
 1) Download the data from a single or various sources
 2) Send the data to be processed
