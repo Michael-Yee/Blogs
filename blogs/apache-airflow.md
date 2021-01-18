@@ -84,7 +84,7 @@ send_email = PythonOperator(
 # Define order
 download_data >> send_data_to_processing >> monitor_processsing >> generate_report >> send_email
 ```
-NOTE: When designing Airflow operators, it’s important to keep in mind that they may be executed more than once. therefore should be idempotent.
+NOTE: When designing Airflow operators, it’s important to keep in mind that they may be executed more than once. therefore should be atomic.
 
 The above DAG snippet creates five operators: one DummyOperator (does nothing) and four PythonOperator which calls their defined methods when the task is executed
 
@@ -172,3 +172,21 @@ Nagivate to the Airflow UI in your browser, you should see a listed of DAGs in t
 Figure 2: Airflow UI
 
 In order to start a DAG Run, first turn the workflow on (arrow 1), then click the Trigger Dag button (arrow 2) and finally, click on the Graph View (arrow 3) to see the progress of the run.
+
+---
+
+Appendix Two: Operators (https://airflow.apache.org/docs/apache-airflow/stable/concepts.html#operators)
+
+DAGs describe how to run a workflow -> ensures that operators run in the correct order.
+
+Operators determine what actually gets done by a task => describes a single atomic task.
+
+Airflow provides many built-in operators for many common tasks, several of the more common operators are as follows:
+
+- BashOperator: Execute a Bash script, command or set of commands
+- EmailOperator: Sends an email
+- MySqlOperator: Executes sql code in a specific MySQL database
+- PythonOperator:  Executes a Python callable
+- S3FileTransformOperator: Copies data from a source S3 location to a temporary location on the local filesystem. Runs a transformation on this file as specified by the transformation script and uploads the output to a destination S3 location.
+- SimpleHttpOperator: Calls an endpoint on an HTTP system to execute an action
+- SlackAPIOperator: Base Slack Operator The SlackAPIPostOperator is derived from this operator
