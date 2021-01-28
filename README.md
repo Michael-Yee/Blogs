@@ -10,6 +10,7 @@
 - D is for Django 
 - Docker or Vagrant for a software development environment?
 - Flask Blueprints
+- How to create a Slack application
 - Selenium grid on AWS using Ansible
 - Selenium grid on AWS using Rancher
 - Terraform and AWS
