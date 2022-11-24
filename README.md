@@ -3,12 +3,14 @@
 
 ## Blogs:
 
+- .NET Core 3.x logging with Serilog
 - Accellion Kiteworks
 - Apache Airflow
 - Application Factory
 - Celery with RabbitMQ
 - D is for Django 
 - Docker or Vagrant for a software development environment?
+- Exploring .NET Core 3.x default logging
 - Flask Blueprints
 - How to create a knowledge base using Confluence
 - How to create a Slack application

@@ -1,5 +1,5 @@
 ---
-title: Exploring .NET Core 3.x default logging
+title: Exploring .NET Core 3.x default logging - Part 1
 author: Michael Yee
 published: True
 ---

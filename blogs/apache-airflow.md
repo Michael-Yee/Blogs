@@ -88,6 +88,8 @@ NOTE: When designing Airflow operators, it’s important to keep in mind that th
 
 The above DAG snippet creates five operators: one DummyOperator (does nothing) and four PythonOperator which calls their defined methods when the task is executed
 
+For more information on operators, see appendix two.
+
 # Conclusion
 
 ETL processes are plagued by inefficiencies, resulting in failed tasks leading to operational downtime.  In this blog, the Apache Airflow framework was presented as a solution in creating, monitoring and scaling these critical data pipelines.
