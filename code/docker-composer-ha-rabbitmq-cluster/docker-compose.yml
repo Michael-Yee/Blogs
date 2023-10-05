@@ -1,0 +1,60 @@
+version: '3'
+
+services:
+
+  rabbitmqmaster:
+    image: rabbitmq:${RabbitMQ_VERSION}-management
+    restart: always
+    hostname: rabbitmqmaster
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=${RABBITMQ_ERLANG_COOKIE}
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+    volumes:
+      - ./data/rabbitmqmaster-data:/var/lib/rabbitmq
+      - ./rabbitmq/cluster-entrypoint.sh:/usr/local/bin/cluster-entrypoint.sh    
+    entrypoint: /usr/local/bin/cluster-entrypoint.sh
+
+  rabbitmq1:
+    image: rabbitmq:${RabbitMQ_VERSION}-management
+    restart: always
+    hostname: rabbitmq1
+    depends_on:
+      - rabbitmqmaster
+    environment:
+      - CLUSTERED=true
+      - CLUSTER_WITH=rabbitmqmaster      
+      - RABBITMQ_ERLANG_COOKIE=${RABBITMQ_ERLANG_COOKIE}
+    volumes:
+      - ./data/rabbitmq1-data:/var/lib/rabbitmq
+      - ./rabbitmq/cluster-entrypoint.sh:/usr/local/bin/cluster-entrypoint.sh
+    entrypoint: /usr/local/bin/cluster-entrypoint.sh
+
+  rabbitmq2:
+    image: rabbitmq:${RabbitMQ_VERSION}-management
+    restart: always    
+    hostname: rabbitmq2
+    depends_on:
+      - rabbitmqmaster
+    environment:
+      - CLUSTERED=true
+      - CLUSTER_WITH=rabbitmqmaster      
+      - RABBITMQ_ERLANG_COOKIE=${RABBITMQ_ERLANG_COOKIE}
+    volumes:
+      - ./data/rabbitmq2-data:/var/lib/rabbitmq
+      - ./rabbitmq/cluster-entrypoint.sh:/usr/local/bin/cluster-entrypoint.sh
+    entrypoint: /usr/local/bin/cluster-entrypoint.sh
+
+  haproxy:
+    image: haproxy:${HAPROXY_VERSION}
+    restart: always
+    volumes:
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    depends_on:
+      - rabbitmqmaster
+      - rabbitmq1
+      - rabbitmq2
+    ports:
+      -  1936:1936 
+      -  5672:5672
+      -  15672:15672  

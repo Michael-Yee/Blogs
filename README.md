@@ -10,8 +10,14 @@
 - Celery with RabbitMQ
 - D is for Django 
 - Docker or Vagrant for a software development environment?
+- Elasticsearch
+  - Create a snapshot
+  - Snapshot and restore
+  - Register a snapshot repository
+  - Restore a snapshot  
 - Exploring .NET Core 3.x default logging
 - Flask Blueprints
+- Fundamentals of Ansible
 - How to create a knowledge base using Confluence
 - How to create a Slack application
 - Selenium grid on AWS using Ansible
@@ -28,6 +34,10 @@
 - Celery with RabbitMQ Demo
 - Celery, Flask and Redis Demo
 - CicleCI Demo
+- Docker Compose examples
+  - Elastic Stack
+  - Maria Cluster
+  - RabbitMq Cluster
 - Generic Receipt Parser Service
 - Selenium Grid using Ansible
 - Selenium Grid using Rancher
