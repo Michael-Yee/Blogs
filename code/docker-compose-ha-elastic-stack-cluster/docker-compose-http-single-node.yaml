@@ -1,0 +1,148 @@
+version: "3.7"
+
+services:
+  es01:
+    restart: unless-stopped
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    volumes:
+      - esdata01:/usr/share/elasticsearch/data
+    ports:
+      - ${ES_PORT}:9200
+    environment:
+      - node.name=es01
+      - cluster.name=${CLUSTER_NAME}
+      - cluster.initial_master_nodes=es01,es02,es03
+      - discovery.seed_hosts=es02,es03
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+      - xpack.security.transport.ssl.enabled=false
+      - xpack.license.self_generated.type=${LICENSE}
+    mem_limit: ${MEM_LIMIT}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65535
+        hard: 65535
+      nproc:
+        soft: -1
+        hard: -1         
+    healthcheck:
+      test: curl -u elastic:${ELASTIC_PASSWORD} -s -f es01:9200/_cat/health >/dev/null || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 10
+
+  es02:
+    restart: unless-stopped
+    depends_on:
+      - es01
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    volumes:
+      - esdata02:/usr/share/elasticsearch/data
+    ports:
+      - 9201:9200      
+    environment:
+      - node.name=es02
+      - cluster.name=${CLUSTER_NAME}
+      - cluster.initial_master_nodes=es01,es02,es03
+      - discovery.seed_hosts=es01,es03
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+      - xpack.security.transport.ssl.enabled=false      
+      - xpack.license.self_generated.type=${LICENSE}
+    mem_limit: ${MEM_LIMIT}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65535
+        hard: 65535
+      nproc:
+        soft: -1
+        hard: -1
+    healthcheck:
+      test: curl -u elastic:${ELASTIC_PASSWORD} -s -f es02:9200/_cat/health >/dev/null || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 10
+
+  es03:
+    restart: unless-stopped
+    depends_on:
+      - es01
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    volumes:
+      - esdata03:/usr/share/elasticsearch/data
+    ports:
+      - 9202:9200
+    environment:
+      - node.name=es03
+      - cluster.name=${CLUSTER_NAME}
+      - cluster.initial_master_nodes=es01,es02,es03
+      - discovery.seed_hosts=es01,es02
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+      - xpack.security.transport.ssl.enabled=false      
+      - xpack.license.self_generated.type=${LICENSE}
+    mem_limit: ${MEM_LIMIT}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65535
+        hard: 65535
+      nproc:
+        soft: -1
+        hard: -1
+    healthcheck:
+      test: curl -u elastic:${ELASTIC_PASSWORD} -s -f es03:9200/_cat/health >/dev/null || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 10
+
+  kibana:
+    restart: unless-stopped
+    depends_on:
+      es01:
+        condition: service_healthy
+      es02:
+        condition: service_healthy
+      es03:
+        condition: service_healthy
+    image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
+    volumes:
+      - kibanadata:/usr/share/kibana/data
+    ports:
+      - ${KIBANA_PORT}:5601
+    environment:
+      - SERVERNAME=kibana
+      - ELASTICSEARCH_HOSTS=http://es01:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
+      - ELASTICSEARCH_URL=http://es01:9200
+    mem_limit: ${MEM_LIMIT}
+    healthcheck:
+      test: curl -u elastic:${ELASTIC_PASSWORD} -s kibana:5601 >/dev/null || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 10
+
+volumes:
+  esdata01:
+    driver: local
+  esdata02:
+    driver: local
+  esdata03:
+    driver: local
+  kibanadata:
+    driver: local

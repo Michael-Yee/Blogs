@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+  mariadb-master1:
+    container_name: $MASTER1_NAME
+    image: mariadb:$MARIADB_VERSION
+    restart: unless-stopped
+    volumes:
+      - ./master1/master1.cnf:/etc/mysql/conf.d/mysql.cnf
+      - db_master1_data:/var/lib/mysql:rw
+    environment:
+      MARIADB_DATABASE: $MASTER_DATABASE
+      MARIADB_USER: $MASTER_USER
+      MARIADB_PASSWORD: $MASTER1_PASSWORD
+      MARIADB_ROOT_PASSWORD: $MASTER_PASSWORD
+  
+    ports:
+      - $MASTER1_PORT:3306
+    networks:
+      - db-stack
+    mem_limit: 2G
+
+  mariadb-master2:
+    container_name: $MASTER2_NAME
+    image: mariadb:$MARIADB_VERSION
+    restart: unless-stopped
+    volumes:
+      - ./master2/master2.cnf:/etc/mysql/conf.d/mysql.cnf
+      - db_master2_data:/var/lib/mysql:rw
+    environment:
+      MARIADB_DATABASE: $MASTER_DATABASE
+      MARIADB_USER: $MASTER_USER
+      MARIADB_PASSWORD: $MASTER_PASSWORD
+      MARIADB_ROOT_PASSWORD: $MASTER2_PASSWORD
+    ports:
+      - $MASTER2_PORT:3306
+    networks:
+      - db-stack
+    mem_limit: 2G
+
+volumes:
+  db_master1_data:
+    name: db_master1_data
+    driver: local
+
+  db_master2_data:
+    name: db_master2_data
+    driver: local
+
+networks:
+  db-stack:
+    name: db-stack
+    driver: bridge
