@@ -58,7 +58,7 @@ functions:
           bucket: "average-word-vector"
           event: s3:ObjectCreated:*
           rules:
-            - prefix: web_data/
+            - prefix: bad/
           existing: true
   query:
     image:
