@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  lambda:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ~/.aws:/root/.aws
+    platform: linux/amd64
+    ports:
+      - "9000:8080"

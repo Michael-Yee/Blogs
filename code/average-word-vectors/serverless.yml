@@ -1,0 +1,78 @@
+service: average-word-vector
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.9
+  region: us-east-1
+  profile: default
+  stage: dev
+
+  ecr:
+    scanOnPush: true
+    images:
+      appimage:
+        #  TODO: Find the right arguments to fix the MacBook M series notebook issue when building docker images
+        buildArgs:
+          provenance: false
+        path: ./
+        platform: "linux/amd64"
+  iam:  #  TODO: Update with restrictive permissions
+    role:
+      statements:
+        - Effect: "Allow"
+          Resource: "*"
+          Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+        - Effect: "Allow"
+          Resource: 
+            - "arn:aws:s3:::average-word-vector"
+            - "arn:aws:s3:::average-word-vector/*"
+          Action: "s3:*"
+        - Effect: "Allow"
+          Resource: "arn:aws:ssm:us-east-1:123456789:parameter/average-word-vector/*"
+          Action: 
+            - ssm:GetParameterHistory
+            - ssm:GetParameterByPath
+            - ssm:GetParameters
+            - ssm:GetParameter
+
+functions:
+  average_word_vector:
+    image:
+      name: appimage
+      command:
+        - app.average_word_vector  
+      entryPoint:
+        - "/lambda-entrypoint.sh"
+    #  TODO: Optimize the following parameters
+    ephemeralStorageSize: 10240
+    memorySize: 10240
+    timeout: 900
+
+    events:
+      - s3:
+          bucket: "average-word-vector"
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: web_data/
+          existing: true
+  query:
+    image:
+      name: appimage
+      command:
+        - app.query  
+      entryPoint:
+        - "/lambda-entrypoint.sh"
+    #  TODO: Optimize the following parameters
+    ephemeralStorageSize: 10240
+    memorySize: 10240
+    timeout: 900
+
+    events:
+      - httpApi:
+          path: /
+          method: post

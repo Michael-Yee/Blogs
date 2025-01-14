@@ -1,0 +1,5 @@
+boto3==1.35.52
+gensim==4.3.3
+smart_open[s3]==7.0.5
+opensearch-py==2.7.1
+polars==1.12.0
